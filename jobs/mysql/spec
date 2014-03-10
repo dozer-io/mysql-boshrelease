@@ -1,0 +1,13 @@
+---
+name: mysql
+packages: []
+templates:
+  bin/monit_debugger: bin/monit_debugger
+  bin/mysql_ctl: bin/mysql_ctl
+  config/mysql.conf.erb: config/mysql.conf
+  data/properties.sh.erb: data/properties.sh
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+properties:
+  mysql.leader_address:
+    description: Hostname/IP to the leader/master of the cluster
