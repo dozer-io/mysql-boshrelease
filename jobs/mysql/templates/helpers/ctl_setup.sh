@@ -76,6 +76,4 @@ do
   export CLASSPATH=${java_jar}:$CLASSPATH
 done
 
-PIDFILE=$RUN_DIR/$JOB_NAME.pid
-
 echo '$PATH' $PATH

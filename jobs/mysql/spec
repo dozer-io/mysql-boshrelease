@@ -1,13 +1,26 @@
 ---
 name: mysql
-packages: []
+
+packages:
+  - mysqlclient
+  - mysql
+
 templates:
   bin/monit_debugger: bin/monit_debugger
-  bin/mysql_ctl: bin/mysql_ctl
-  config/mysql.conf.erb: config/mysql.conf
+  bin/mysql_ctl.erb: bin/mysql_ctl
+  bin/my.bootstrap.erb: bin/my.bootstrap
+  bin/my.shutdown.erb: bin/my.shutdown
+  config/my.cnf.erb: config/my.cnf
   data/properties.sh.erb: data/properties.sh
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
 properties:
-  mysql.leader_address:
-    description: Hostname/IP to the leader/master of the cluster
+  mysql.password:
+    description: Password for the MySQL root user
+  mysql.port:
+    description: TCP port MySQL listens on
+    default: 3306
+  mysql.production:
+    description: Use production optimized MySQL directives (Boolean)
+    default: false

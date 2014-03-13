@@ -1,0 +1,47 @@
+[client]
+port      = <%= p("mysql.port") %>
+socket    = /var/vcap/sys/run/mysql/mysqld.sock
+
+[mysqld_safe]
+socket    = /var/vcap/sys/run/mysql/mysqld.sock
+nice      = 0
+log-error = /var/vcap/sys/log/mysql/mysqld.err.log
+user      = vcap
+
+[mysqld]
+collation_server        = utf8_unicode_ci
+character_set_server    = utf8
+user      = vcap
+pid-file  = /var/vcap/sys/run/mysql/mysqld.pid
+socket    = /var/vcap/sys/run/mysql/mysqld.sock
+port      = <%= p("mysql.port") %>
+basedir   = /usr
+datadir   = /var/vcap/store/mysql
+tmpdir    = /tmp
+language  = /var/vcap/packages/mysql/share/mysql/english
+skip-external-locking
+fast_index_creation = false
+
+key_buffer              = <%= p("mysql.production") ? '3276M' : '16M' %>
+innodb_buffer_pool_size = <%= p("mysql.production") ? '3276M' : '256M' %>
+max_allowed_packet      = 16M
+thread_stack            = 256K
+thread_cache_size       = <%= p("mysql.production") ? 128 : 8 %>
+thread_concurrency      = <%= p("mysql.production") ? 8 : 2 %>
+max_connections         = <%= p("mysql.production") ? 512 : 16 %>
+table_cache             = <%= p("mysql.production") ? 2048 : 256 %>
+myisam-recover          = BACKUP
+query_cache_limit       = 1M
+query_cache_size        = <%= p("mysql.production") ? '128M' : '16M' %>
+expire_logs_days        = 10
+max_binlog_size         = 100M
+
+[mysqldump]
+quick
+quote-names
+max_allowed_packet = 16M
+
+[mysql]
+
+[isamchk]
+key_buffer = 16M
