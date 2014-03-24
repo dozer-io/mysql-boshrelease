@@ -24,3 +24,5 @@ properties:
   mysql.production:
     description: Use production optimized MySQL directives (Boolean)
     default: false
+  mysql.databases:
+    description: Array of databases that need to be created, represented by hashes with a name, a user and a password

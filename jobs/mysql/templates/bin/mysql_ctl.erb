@@ -13,6 +13,7 @@ CONF_DIR=/var/vcap/jobs/mysql/config
 MY_LD_FILE=/etc/ld.so.conf.d/mysql.conf
 
 SERVER=/var/vcap/packages/mysql/libexec/mysql.server
+SOCKET=/var/vcap/sys/run/mysql/mysqld.sock
 
 case $1 in
 
@@ -23,6 +24,22 @@ case $1 in
     /sbin/ldconfig
 
     $SERVER start $CONF_DIR/my.cnf
+
+    <% password = p("mysql.password") %>
+
+    <% p("mysql.databases").each do |database| %>
+      echo "creating database with name <%= database["name"] %>"
+      mysql -u root --password='<%= password %>' -S $SOCKET \
+        -e "CREATE DATABASE <%= database["name"] %>;" mysql
+
+      echo "creating user with name <%= database["user"] %>"
+      mysql -u root --password='<%= password %>' -S $SOCKET \
+        -e "CREATE USER <%= database["user"] %> IDENTIFIED BY '<%= database["password"] %>';" mysql
+
+      echo "granting privileges to <%= database["user"] %> on database <%= database["name"] %>"
+      mysql -u root --password='<%= password %>' -S $SOCKET \
+        -e "GRANT ALL PRIVILEGES ON <%= database["name"] %>.* TO <%= database["user"] %> WITH GRANT OPTION;" mysql
+    <% end %>
     ;;
 
   stop)
